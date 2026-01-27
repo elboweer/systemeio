@@ -1,4 +1,4 @@
-FROM php:8.3-cli-alpine AS sio_test
+FROM php:8.3-cli-alpine AS sio_php
 RUN apk add --no-cache git zip bash
 
 # Setup php extensions
