@@ -11,7 +11,7 @@ PHONY: help
 help: ## This help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-init: down build install up success-message php ## Initialize environment
+init: down build install up db-wait db-create migrate fixtures success-message php ## Initialize environment
 
 build: ## Build services.
 	${DC} build $(c)
@@ -40,6 +40,12 @@ pg: ## PG container
 	${PG_EXEC} psql -U $${POSTGRES_USER:-sio} -d $${POSTGRES_DB:-sio}
 
 # Database
+db-wait:
+	@echo "Waiting for PostgreSQL..."
+	@sleep 3
+	@until docker compose exec -T sio_pg pg_isready -U sio > /dev/null 2>&1; do sleep 1; done
+	@echo "PG is ready!"
+
 db-create: ## Create database
 	${PHP_EXEC} php bin/console doctrine:database:create --if-not-exists
 
@@ -48,6 +54,9 @@ migrate: ## Run migrations
 
 migration: ## Generate new migration
 	${PHP_EXEC} php bin/console make:migration
+
+fixtures:
+	${PHP_EXEC} php bin/console doctrine:fixtures:load --no-interaction
 
 # Tests
 test: ## Run tests
