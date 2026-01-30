@@ -1,4 +1,4 @@
-### Calculate Price
+### Calculate Price - Успех с купоном
 POST http://127.0.0.1:8337/calculate-price
 Accept: application/json
 Content-Type: application/json
@@ -7,6 +7,36 @@ Content-Type: application/json
   "product": 1,
   "taxNumber": "DE123456789",
   "couponCode": "D15"
+}
+
+### Calculate Price - Успех без купона
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "GR123456789"
+}
+
+### Calculate Price - Ошибка валидации
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "INVALID"
+}
+
+### Calculate Price - Нет товара
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 999,
+  "taxNumber": "DE123456789"
 }
 
 ### Execute Purchase
