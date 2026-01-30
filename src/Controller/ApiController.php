@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Request\CalculatePriceRequest;
+use App\Request\PurchaseRequest;
 use App\Service\OrderService;
 use App\Service\RequestHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +17,7 @@ final class ApiController extends AbstractController
 {
     public function __construct(
         private readonly RequestHandler $requestHandler,
-        private readonly OrderService $orderService,
+        private readonly OrderService   $orderService,
     )
     {
     }
@@ -33,5 +34,21 @@ final class ApiController extends AbstractController
         );
 
         return new JsonResponse(['price' => $price]);
+    }
+
+    #[Route('/purchase', name: 'api_purchase', methods: ['POST'])]
+    public function purchase(Request $request): JsonResponse
+    {
+        $purchaseRequest = $this->requestHandler->handle($request, PurchaseRequest::class);
+
+        $this->orderService->purchase(
+            $purchaseRequest->product,
+            $purchaseRequest->taxNumber,
+            $purchaseRequest->couponCode,
+            $purchaseRequest->paymentProcessor,
+        );
+
+        // при проблемах обрабатываются исключения через прослушку
+        return new JsonResponse(['success' => true]);
     }
 }

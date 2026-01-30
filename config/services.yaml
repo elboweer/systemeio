@@ -26,3 +26,7 @@ services:
     App\EventSubscriber\ApiExceptionSubscriber:
         arguments:
             $debug: '%kernel.debug%'
+
+    # Для вайринга
+    Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor: ~
+    Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor: ~

@@ -39,7 +39,7 @@ Content-Type: application/json
   "taxNumber": "DE123456789"
 }
 
-### Execute Purchase
+### Purchase - PayPal
 POST http://127.0.0.1:8337/purchase
 Accept: application/json
 Content-Type: application/json
@@ -47,6 +47,37 @@ Content-Type: application/json
 {
   "product": 1,
   "taxNumber": "IT12345678900",
-  "couponCode": "D15",
   "paymentProcessor": "paypal"
+}
+
+### Purchase - Stripe
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "paymentProcessor": "stripe"
+}
+
+### Purchase - Невалидный
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "paymentProcessor": "INVALID"
+}
+
+### Purchase - Не указан
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789"
 }
